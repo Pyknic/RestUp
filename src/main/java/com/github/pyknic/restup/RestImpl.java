@@ -218,16 +218,19 @@ class RestImpl implements Rest {
                 conn.setUseCaches(false);
                 conn.setAllowUserInteraction(false);
                 
-                if (stream != NO_STREAM) {
+                final boolean doOutput = stream != NO_STREAM;
+                if (doOutput) {
                     conn.setDoOutput(true);
                 }
                 
                 conn.connect();
-                try (final BufferedWriter wr = new BufferedWriter(
-                    new OutputStreamWriter(conn.getOutputStream()))) {
-                    while (stream.hasNext()) {
-                        final String data = stream.next();
-                        wr.append(data);
+                if (doOutput) {
+                    try (final BufferedWriter wr = new BufferedWriter(
+                        new OutputStreamWriter(conn.getOutputStream()))) {
+                        while (stream.hasNext()) {
+                            final String data = stream.next();
+                            wr.append(data);
+                        }
                     }
                 }
 
@@ -248,7 +251,7 @@ class RestImpl implements Rest {
                 
                 return new Response(status, text);
             } catch (final IOException ex) {
-                throw new RuntimeException("Could not send get-command.", ex);
+                throw new RuntimeException("Could not send " + method.name() + "-command.", ex);
             } finally {
                 if (conn != null) {
                     conn.disconnect();
