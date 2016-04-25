@@ -1,6 +1,16 @@
 # RestUp
 A lightweight Java library to simplify communicating with REST API:s. The library is completely asynchronous with full support for modern constructs such as `CompletableFuture` and `Optional`. 
 
+### Installation
+Add the following to your `pom.xml`-file:
+```xml
+<dependency>
+    <groupId>com.github.pyknic</groupId>
+    <artifactId>restup</artifactId>
+    <version>1.0.1</version>
+</dependency>
+```
+
 ### Connect to an API
 ```java
 Rest rest = Rest.connect("127.0.0.1", 8080);
